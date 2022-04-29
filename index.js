@@ -4,7 +4,7 @@ const axios = require("axios").default;
 const io = require("socket.io");
 const { spawn } = require("child_process");
 const decoder = new TextDecoder();
-const pathToFfmpeg = require("ffmpeg-static");
+// const pathToFfmpeg = require("ffmpeg-static");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -50,7 +50,8 @@ wsServer.on("connection", (socket) => {
             "-c:v", "gif",
           ];
     //prettier-ignore
-    const ffmpeg = spawn(pathToFfmpeg, [
+    const ffmpeg = spawn("ffmpeg", [
+    // const ffmpeg = spawn(pathToFfmpeg, [
       "-framerate", String(FRAME_RATE),
       "-f", "jpeg_pipe",
       "-i", "pipe:",
