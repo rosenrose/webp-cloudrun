@@ -64,7 +64,7 @@ wsServer.on("connection", (socket) => {
 
     let size = 0;
     ffmpeg.stdout.on("data", (data) => {
-      // console.log((size += data.length));
+      console.log((size += data.length));
       socket.emit("transfer", data);
     });
     ffmpeg.stderr.on("data", (msg) => {
@@ -116,7 +116,7 @@ function parseMessage(message) {
   let progress;
 
   if (message.startsWith("frame")) {
-    // console.log(message);
+    console.log(message);
     const frame = message.split(" fps=")[0].split("frame=")[1].trim();
     const ts = message.split("time=")[1].split(" ")[0];
     const time = ts2sec(ts);
