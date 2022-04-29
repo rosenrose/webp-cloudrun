@@ -60,11 +60,9 @@ wsServer.on("connection", (socket) => {
       // "-progress", "pipe:2",
       "pipe:1",
     ]);
-    // console.log(ffmpeg);
 
     let size = 0;
     ffmpeg.stdout.on("data", (data) => {
-      console.log((size += data.length));
       socket.emit("transfer", data);
     });
     ffmpeg.stderr.on("data", (msg) => {
@@ -80,7 +78,6 @@ wsServer.on("connection", (socket) => {
     let downloadCount = 1;
     for (let i = 0; i < Math.min(parseInt(duration), MAX_DURATION); i++) {
       const filename = `${(cut + i).toString().padStart(parseInt(PAD_LENGTH), "0")}.jpg`;
-      // console.log(filename);
 
       downloadPromises.push(
         new Promise((resolve) => {
@@ -117,7 +114,6 @@ function parseMessage(message) {
   let progress;
 
   if (message.startsWith("frame")) {
-    console.log(message);
     const frame = message.split(" fps=")[0].split("frame=")[1].trim();
     const ts = message.split("time=")[1].split(" ")[0];
     const time = ts2sec(ts);
