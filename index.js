@@ -30,7 +30,9 @@ const FRAME_RATE = 12;
 const MAX_DURATION = FRAME_RATE * 7;
 
 wsServer.on("connection", (socket) => {
+  console.log("Connected");
   socket.on("webp", async (params, done) => {
+    console.log("Webp");
     const { cloud, title, cut, duration, webpGif, webpWidth, gifWidth, PAD_LENGTH } = params;
 
     //prettier-ignore
