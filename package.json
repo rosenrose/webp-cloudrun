@@ -1,7 +1,7 @@
 {
   "name": "webp",
   "version": "1.0.0",
-  "main": "cloud function.js",
+  "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
