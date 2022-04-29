@@ -1,0 +1,14 @@
+{
+  "name": "webp",
+  "version": "1.0.0",
+  "main": "cloud function.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "express": "^4.18.0",
+    "socket.io": "^4.5.0"
+  }
+}
