@@ -30,9 +30,7 @@ const FRAME_RATE = 12;
 const MAX_DURATION = FRAME_RATE * 7;
 
 wsServer.on("connection", (socket) => {
-  console.log("Connected");
   socket.on("webp", async (params, done) => {
-    console.log("Webp", params);
     const { cloud, title, cut, duration, webpGif, webpWidth, gifWidth, PAD_LENGTH } = params;
 
     //prettier-ignore
@@ -51,7 +49,7 @@ wsServer.on("connection", (socket) => {
             "-f", "gif",
             "-c:v", "gif",
           ];
-    console.log("before");
+
     //prettier-ignore
     const ffmpeg = spawn("ffmpeg", [
     // const ffmpeg = spawn(pathToFfmpeg, [
@@ -62,7 +60,7 @@ wsServer.on("connection", (socket) => {
       // "-progress", "pipe:2",
       "pipe:1",
     ]);
-    console.log(ffmpeg);
+    // console.log(ffmpeg);
 
     let size = 0;
     ffmpeg.stdout.on("data", (data) => {
@@ -82,6 +80,7 @@ wsServer.on("connection", (socket) => {
     let downloadCount = 1;
     for (let i = 0; i < Math.min(parseInt(duration), MAX_DURATION); i++) {
       const filename = `${(cut + i).toString().padStart(parseInt(PAD_LENGTH), "0")}.jpg`;
+      // console.log(filename);
 
       downloadPromises.push(
         new Promise((resolve) => {
