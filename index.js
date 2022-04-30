@@ -31,13 +31,13 @@ const MAX_DURATION = FRAME_RATE * 7;
 
 wsServer.on("connection", (socket) => {
   socket.on("webp", async (params, done) => {
-    const { cloud, title, cut, duration, webpGif, webpWidth, gifWidth, PAD_LENGTH } = params;
+    const { cloud, title, cut, duration, webpGif, WEBP_WIDTH, GIF_WIDTH, PAD_LENGTH } = params;
 
     //prettier-ignore
     const command =
       webpGif === "webp"
         ? [
-            "-vf", `scale=${webpWidth}:-1`,
+            "-vf", `scale=${WEBP_WIDTH}:-1`,
             "-loop", "0",
             "-preset", "drawing",
             "-qscale", "90",
@@ -45,7 +45,7 @@ wsServer.on("connection", (socket) => {
             "-c:v", "webp",
           ]
         : [
-            "-lavfi", `split[a][b];[a]scale=${gifWidth}:-1,palettegen[p];[b]scale=${gifWidth}:-1[g];[g][p]paletteuse`,
+            "-lavfi", `split[a][b];[a]scale=${GIF_WIDTH}:-1,palettegen[p];[b]scale=${GIF_WIDTH}:-1[g];[g][p]paletteuse`,
             "-f", "gif",
             "-c:v", "gif",
           ];
