@@ -5,6 +5,8 @@ const io = require("socket.io");
 const { spawn } = require("child_process");
 const decoder = new TextDecoder();
 // const pathToFfmpeg = require("ffmpeg-static");
+const WEBP_WIDTH = 720;
+const GIF_WIDTH = 360;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,7 +33,7 @@ const MAX_DURATION = FRAME_RATE * 7;
 
 wsServer.on("connection", (socket) => {
   socket.on("webp", async (params, done) => {
-    const { cloud, title, cut, duration, webpFormat, WEBP_WIDTH, GIF_WIDTH, PAD_LENGTH } = params;
+    const { cloud, title, cut, duration, webpFormat, PAD_LENGTH } = params;
 
     //prettier-ignore
     const command =
