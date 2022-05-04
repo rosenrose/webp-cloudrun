@@ -5,8 +5,8 @@ const io = require("socket.io");
 const { spawn } = require("child_process");
 const decoder = new TextDecoder();
 // const pathToFfmpeg = require("ffmpeg-static");
-const WEBP_WIDTH = 720;
-const GIF_WIDTH = 360;
+const WEBP_HEIGHT = 720;
+const GIF_HEIGHT = 360;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -39,7 +39,7 @@ wsServer.on("connection", (socket) => {
     const command =
       webpFormat === "webp"
         ? [
-            "-vf", `scale=${WEBP_WIDTH}:-1`,
+            "-vf", `scale=-1:${WEBP_HEIGHT}`,
             "-loop", "0",
             "-preset", "drawing",
             "-qscale", "90",
@@ -47,7 +47,7 @@ wsServer.on("connection", (socket) => {
             "-c:v", "webp",
           ]
         : [
-            "-lavfi", `split[a][b];[a]scale=${GIF_WIDTH}:-1,palettegen[p];[b]scale=${GIF_WIDTH}:-1[g];[g][p]paletteuse`,
+            "-lavfi", `split[a][b];[a]scale=-1:${GIF_HEIGHT},palettegen[p];[b]scale=-1:${GIF_HEIGHT}[g];[g][p]paletteuse`,
             "-f", "gif",
             "-c:v", "gif",
           ];
