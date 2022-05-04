@@ -5,8 +5,8 @@ const io = require("socket.io");
 const { spawn } = require("child_process");
 const decoder = new TextDecoder();
 // const pathToFfmpeg = require("ffmpeg-static");
-const WEBP_HEIGHT = 720;
-const GIF_HEIGHT = 360;
+const WEBP_HEIGHT = 540;
+const GIF_HEIGHT = 270;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
