@@ -8,6 +8,14 @@ const decoder = new TextDecoder();
 const WEBP_HEIGHT = 540;
 const GIF_HEIGHT = 270;
 
+const WEBP_WIDTH = 960;
+const GIF_WIDTH = 480;
+
+const cloud = {
+  djmax: "https://d2wwh0934dzo2k.cloudfront.net/djmax/cut",
+  ghibli: "https://d2wwh0934dzo2k.cloudfront.net/ghibli",
+};
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.get("/", (req, res) => {
@@ -33,13 +41,20 @@ const MAX_DURATION = FRAME_RATE * 7;
 
 wsServer.on("connection", (socket) => {
   socket.on("webp", async (params, done) => {
-    const { cloud, title, cut, duration, webpFormat, PAD_LENGTH } = params;
+    const { title, cut, duration, webpFormat, PAD_LENGTH, from } = params;
+    let scale = "";
+
+    if (from === "djmax") {
+      scale = webpFormat === "webp" ? `scale=-1:${WEBP_HEIGHT}` : `scale=-1:${GIF_HEIGHT}`;
+    } else if (from === "ghibli") {
+      scale = webpFormat === "webp" ? `scale=${WEBP_WIDTH}:-1` : `scale=${GIF_WIDTH}:-1`;
+    }
 
     //prettier-ignore
     const command =
       webpFormat === "webp"
         ? [
-            "-vf", `scale=-1:${WEBP_HEIGHT}`,
+            "-vf", scale,
             "-loop", "0",
             "-preset", "drawing",
             "-qscale", "90",
@@ -47,7 +62,7 @@ wsServer.on("connection", (socket) => {
             "-c:v", "webp",
           ]
         : [
-            "-lavfi", `split[a][b];[a]scale=-1:${GIF_HEIGHT},palettegen[p];[b]scale=-1:${GIF_HEIGHT}[g];[g][p]paletteuse`,
+            "-lavfi", `split[a][b];[a]${scale},palettegen[p];[b]${scale}[g];[g][p]paletteuse`,
             "-f", "gif",
             "-c:v", "gif",
           ];
@@ -83,7 +98,7 @@ wsServer.on("connection", (socket) => {
 
       downloadPromises.push(
         new Promise((resolve) => {
-          axios(encodeURI(`${cloud}/${title}/${filename}`), {
+          axios(encodeURI(`${cloud[from]}/${title}/${filename}`), {
             responseType: "arraybuffer",
           }).then((response) => {
             socket.emit("download", downloadCount++);
